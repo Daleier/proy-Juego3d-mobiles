@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
@@ -46,6 +48,8 @@ public class Game extends com.badlogic.gdx.Game implements InputProcessor {
     @Override
     public void create() {
         this.meuMundo = new Mundo();
+		this.width = Gdx.graphics.getWidth();
+		this.height = Gdx.graphics.getHeight();
 
         AssetManager assets = new AssetManager();
         assets.load("modelos/fondo/lowpolymountains.obj", Model.class);
@@ -82,9 +86,11 @@ public class Game extends com.badlogic.gdx.Game implements InputProcessor {
 		sbufferAciertos = new StringBuilder();
 		sbufferVidas = new StringBuilder();
 		sbufferCronometro = new StringBuilder();
-		bitMapFont = new BitmapFont();
-		this.width = Gdx.graphics.getWidth();
-		this.height = Gdx.graphics.getHeight();
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/dsdigit.ttf"));
+		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+		parameter.size = (int)(25);
+		this.bitMapFont = generator.generateFont(parameter); // font size in pixels
+		generator.dispose();
         Gdx.input.setInputProcessor(this);
     }
 
@@ -129,7 +135,7 @@ public class Game extends com.badlogic.gdx.Game implements InputProcessor {
 		bitMapFont.draw(spritebatch, sbufferAciertos,
 				10, 20);
 		bitMapFont.draw(spritebatch, sbufferVidas,
-				this.width-175, 20);
+				this.width-220, 20);
 		bitMapFont.setColor(Color.RED);
 		bitMapFont.draw(spritebatch, sbufferCronometro,
 				(this.width/2) - 5, this.height-20);
@@ -156,6 +162,8 @@ public class Game extends com.badlogic.gdx.Game implements InputProcessor {
 
     @Override
     public void dispose() {
+    	bitMapFont.dispose();
+    	spritebatch.dispose();
         modelBatch.dispose();
         Gdx.input.setInputProcessor(null);
     }

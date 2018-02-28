@@ -1,8 +1,11 @@
 package controlador;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
+
 import modelo.Enemigo;
 import modelo.Mundo;
+import modelo.Nave;
 import modelo.Suelo;
 
 import java.util.HashMap;
@@ -53,7 +56,13 @@ public class Controlador {
         for (Enemigo e : this.meuMundo.getEnemigos()) {
             if (this.meuMundo.getNave().getEsfera().overlaps(e.getEsfera())) {
                 this.meuMundo.getNave().posicion.set(0, 40, 25);
-                //Utiles.imprimirLog("Controlador","controlarNave", "Colisión de nave con enemigo");
+                if(!Nave.invulnerable){
+					Nave.quitarVidas_restantes();
+					Nave.setTiempo_ultimo_impacto(Mundo.getCronometro());
+					Nave.invulnerable = true;
+
+					Gdx.app.log("Controlador", "Colisión de nave con enemigo");
+				}
             }
         }
     }
@@ -76,6 +85,7 @@ public class Controlador {
                 this.meuMundo.getDisparo().posicion = this.auxDisparoPos;
                 //Hacer que el enemigo desaparezca de pantalla y se vuelva a regenerar.
                 e.posicion.z = -150;
+                Nave.addAciertos();
                 //Utiles.imprimirLog("Controlador", "controlarDisparo", "Colisión de disparo  con enemigo");
             }
         }

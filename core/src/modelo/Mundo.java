@@ -5,7 +5,8 @@ import com.badlogic.gdx.math.Vector3;
 import java.util.ArrayList;
 
 public class Mundo {
-	private ArrayList<Suelo> suelos;
+    public static float cronometro;
+    private ArrayList<Suelo> suelos;
     private ArrayList<Enemigo> enemigos;
     private Nave nave;
     private MovilMax disparo;
@@ -15,7 +16,16 @@ public class Mundo {
         this.disparo= new MovilMax(new Vector3(0, 30, 25), 1f, new Vector3(0, 0, 0), new Vector3(0f, 0, 200f),20);
         this.iniciarSuelo();
         this.iniciarEnemigo();
+        this.cronometro = 120;
     }
+
+    public static float getCronometro() {
+		return cronometro;
+	}
+
+    public static int getCronometroInt() {
+		return (int)cronometro;
+	}
 
     private void iniciarSuelo() {
         suelos = new ArrayList<Suelo>();

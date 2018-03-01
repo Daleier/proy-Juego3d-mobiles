@@ -22,6 +22,7 @@ import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 
 import controlador.Controlador;
+import modelo.Enemigo;
 import modelo.MovilMax;
 import modelo.Mundo;
 import modelo.Nave;
@@ -33,7 +34,7 @@ public class Game extends com.badlogic.gdx.Game implements InputProcessor {
     private PerspectiveCamera camara3d;
     private ModelBatch modelBatch;
     private Environment environment;
-    private ModelInstance instanceNave, instanceSuelo, instanceEnemigo, instanceDisparo;
+    private ModelInstance instanceNave, instanceSuelo, instanceEnemigo0, instanceEnemigo1, instanceDisparo;
 
     private Controlador controlador;
     private SpriteBatch spritebatch;
@@ -53,13 +54,19 @@ public class Game extends com.badlogic.gdx.Game implements InputProcessor {
 
         AssetManager assets = new AssetManager();
         assets.load("modelos/fondo/lowpolymountains.obj", Model.class);
-        assets.load("modelos/ship/ship.obj", Model.class);
-        assets.load("modelos/spaceinvader/invader1.obj", Model.class);
+//        assets.load("modelos/ship/ship.obj", Model.class);
+        assets.load("modelos/spaceship/spaceship.obj", Model.class);
+//        assets.load("modelos/spaceinvader/invader1.obj", Model.class);
+        assets.load("modelos/asteroid/asteroid.obj", Model.class);
+        assets.load("modelos/asteroid/a2.obj", Model.class);
         assets.finishLoading();
 
         Model modelSuelo = assets.get("modelos/fondo/lowpolymountains.obj", Model.class);
-        Model modelNave = assets.get("modelos/ship/ship.obj", Model.class);
-        Model modelEnemigo = assets.get("modelos/spaceinvader/invader1.obj", Model.class);
+//        Model modelNave = assets.get("modelos/ship/ship.obj", Model.class);
+        Model modelNave = assets.get("modelos/spaceship/spaceship.obj", Model.class);
+//        Model modelEnemigo = assets.get("modelos/spaceinvader/invader1.obj", Model.class);
+        Model modelEnemigo0 = assets.get("modelos/asteroid/asteroid.obj", Model.class);
+        Model modelEnemigo1 = assets.get("modelos/asteroid/a2.obj", Model.class);
         //Creación de una esfera para el disparo.
         ModelBuilder modelBuilder = new ModelBuilder();
         Model modelDisparo = modelBuilder.createSphere(5f, 5f, 10f, 10, 10,
@@ -74,7 +81,8 @@ public class Game extends com.badlogic.gdx.Game implements InputProcessor {
 
         this.instanceNave = new ModelInstance(modelNave);
         this.instanceSuelo = new ModelInstance(modelSuelo);
-        this.instanceEnemigo = new ModelInstance(modelEnemigo);
+        this.instanceEnemigo0 = new ModelInstance(modelEnemigo0);
+        this.instanceEnemigo1 = new ModelInstance(modelEnemigo1);
         this.instanceDisparo = new ModelInstance(modelDisparo);
 
         //Modificar el color del suelo.
@@ -116,9 +124,17 @@ public class Game extends com.badlogic.gdx.Game implements InputProcessor {
             this.instanceSuelo.transform.set(s.matriz);
             modelBatch.render(instanceSuelo, environment);
         }
-        for (MovilMax e : this.meuMundo.getEnemigos()) {
-            this.instanceEnemigo.transform.set(e.matriz);
-            modelBatch.render(instanceEnemigo, environment);
+        for (Enemigo e : this.meuMundo.getEnemigos()) {
+            if(e.getTextura() < 0.5){
+				e.escala=0.4f;
+				this.instanceEnemigo0.transform.set(e.matriz);
+                modelBatch.render(instanceEnemigo0, environment);
+            }else{
+				e.escala = 10f;
+				this.instanceEnemigo1.transform.set(e.matriz);
+                modelBatch.render(instanceEnemigo1, environment);
+            }
+
         }
 
         modelBatch.end();

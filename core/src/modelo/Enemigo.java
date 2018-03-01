@@ -3,8 +3,12 @@ package modelo;
 import com.badlogic.gdx.math.Vector3;
 
 public class Enemigo extends MovilMax {
-	public Enemigo(Vector3 pos, float escala, Vector3 velocidade, Vector3 velocidadeMax, float radioEsfera) {
+
+    private double textura;
+
+	public Enemigo(Vector3 pos, float escala, Vector3 velocidade, Vector3 velocidadeMax, float radioEsfera, double textura) {
         super(pos, escala, velocidade, velocidadeMax, radioEsfera);
+        this.textura = textura;
     }
     public void setVelocidade(Vector3 velocidade) {
         this.velocidade = velocidade;
@@ -13,5 +17,9 @@ public class Enemigo extends MovilMax {
             this.velocidade.z = velocidadeMax.z;
         else if (velocidade.z > -Math.abs(this.velocidadeMax.z)/8)
             this.velocidade.z = -Math.abs(this.velocidadeMax.z)/8;
+    }
+
+    public double getTextura() {
+        return textura;
     }
 }

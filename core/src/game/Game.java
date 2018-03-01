@@ -26,6 +26,7 @@ import modelo.Enemigo;
 import modelo.MovilMax;
 import modelo.Mundo;
 import modelo.Nave;
+import modelo.Texturas;
 
 
 public class Game extends com.badlogic.gdx.Game implements InputProcessor {
@@ -51,20 +52,16 @@ public class Game extends com.badlogic.gdx.Game implements InputProcessor {
         this.meuMundo = new Mundo();
 		this.width = Gdx.graphics.getWidth();
 		this.height = Gdx.graphics.getHeight();
-
-        AssetManager assets = new AssetManager();
+		Texturas.cargarTexturas();
+		AssetManager assets = new AssetManager();
         assets.load("modelos/fondo/lowpolymountains.obj", Model.class);
-//        assets.load("modelos/ship/ship.obj", Model.class);
         assets.load("modelos/spaceship/spaceship.obj", Model.class);
-//        assets.load("modelos/spaceinvader/invader1.obj", Model.class);
-        assets.load("modelos/asteroid/asteroid.obj", Model.class);
+		assets.load("modelos/asteroid/asteroid.obj", Model.class);
         assets.load("modelos/asteroid/a2.obj", Model.class);
         assets.finishLoading();
 
         Model modelSuelo = assets.get("modelos/fondo/lowpolymountains.obj", Model.class);
-//        Model modelNave = assets.get("modelos/ship/ship.obj", Model.class);
         Model modelNave = assets.get("modelos/spaceship/spaceship.obj", Model.class);
-//        Model modelEnemigo = assets.get("modelos/spaceinvader/invader1.obj", Model.class);
         Model modelEnemigo0 = assets.get("modelos/asteroid/asteroid.obj", Model.class);
         Model modelEnemigo1 = assets.get("modelos/asteroid/a2.obj", Model.class);
         //Creación de una esfera para el disparo.
@@ -147,6 +144,8 @@ public class Game extends com.badlogic.gdx.Game implements InputProcessor {
 		sbufferAciertos.setLength(0);
 		sbufferAciertos.append("ENEMIGOS ELIMINADOS: "+ Nave.getAciertos());
 		spritebatch.begin();
+		spritebatch.draw(Texturas.left_arrow,0,height/2);
+		spritebatch.draw(Texturas.right_arrow, width-20, (float)height/2, width*0.2, height * 0.2);
 		bitMapFont.setColor(Color.YELLOW);
 		bitMapFont.draw(spritebatch, sbufferAciertos,
 				10, 20);
@@ -178,6 +177,7 @@ public class Game extends com.badlogic.gdx.Game implements InputProcessor {
 
     @Override
     public void dispose() {
+    	Texturas.dispose();
     	bitMapFont.dispose();
     	spritebatch.dispose();
         modelBatch.dispose();
@@ -236,7 +236,8 @@ public class Game extends com.badlogic.gdx.Game implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return false;
+		this.controlador.pulsarTecla(Controlador.Keys.ESPAZO);
+		return false;
     }
 
     @Override

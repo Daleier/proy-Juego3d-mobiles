@@ -1,8 +1,10 @@
 package game;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -30,6 +32,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
 
 import javax.naming.ldap.Control;
+import javax.print.attribute.standard.MediaSize;
 
 import controlador.Controlador;
 import modelo.Enemigo;
@@ -39,7 +42,7 @@ import modelo.Nave;
 import modelo.Texturas;
 
 
-public class Game extends com.badlogic.gdx.Game implements InputProcessor {
+public class PantallaJuego implements InputProcessor, Screen {
 	private Mundo meuMundo;
 
     private PerspectiveCamera camara3d;
@@ -58,9 +61,11 @@ public class Game extends com.badlogic.gdx.Game implements InputProcessor {
     private float height;
     private Vector2 leftArrowPosition;
 	private Vector2 rightArrowPosition;
+	private Game game;
+	// TODO añadir sonido
 
-    @Override
-    public void create() {
+    public PantallaJuego(Game game) {
+    	this.game = game;
         this.meuMundo = new Mundo();
 		this.width = Gdx.graphics.getWidth();
 		this.height = Gdx.graphics.getHeight();
@@ -111,15 +116,19 @@ public class Game extends com.badlogic.gdx.Game implements InputProcessor {
 		Gdx.input.setInputProcessor(this);
     }
 
-    @Override
-    public void render() {
+	@Override
+    public void render(float delta) {
         Gdx.gl20.glClearColor(0f, 0f, 0f, 1f);
         Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
         Gdx.gl20.glEnable(GL20.GL_DEPTH_TEST);
+
         controlador.update(Gdx.graphics.getDeltaTime());
 		Mundo.cronometro -= Gdx.graphics.getDeltaTime();
 
+		if(Mundo.cronometro <= 0 || Nave.getVidas_restantes() <= 0){
+			finJuego();
+		}
         modelBatch.begin(camara3d);
 		spritebatch.begin();
 		spritebatch.draw(Texturas.fondo,0,-height * 0.1f);
@@ -170,6 +179,12 @@ public class Game extends com.badlogic.gdx.Game implements InputProcessor {
 			Nave.invulnerable=false;
 		}
     }
+
+    private void finJuego(){
+		HighScores.engadirPuntuacion(Nave.getAciertos());
+		game.setScreen(new PantallaInicio(game));
+		dispose();
+	}
 
     @Override
     public void resize(int width, int height) {
@@ -296,5 +311,16 @@ public class Game extends com.badlogic.gdx.Game implements InputProcessor {
 
         Gdx.input.setInputProcessor(this);
     }
+
+
+	@Override
+	public void show() {
+		Gdx.input.setInputProcessor(this);
+	}
+
+	@Override
+	public void hide() {
+		Gdx.input.setInputProcessor(null);
+	}
 
 }

@@ -10,6 +10,7 @@ import modelo.Texturas;
 
 public class Juego extends com.badlogic.gdx.Game {
 
+	// TODO errores: pantalla inicio, al acabar una partida se bloquea, al acabar una partida no funcionan los botones de la pantalla de inicio
 	@Override
 	public void create() {
 		Texturas.cargarTexturas();

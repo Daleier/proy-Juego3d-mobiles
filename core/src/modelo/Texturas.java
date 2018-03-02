@@ -11,15 +11,20 @@ import com.badlogic.gdx.graphics.Texture;
 public class Texturas {
 	public static Texture left_arrow;
 	public static Texture right_arrow;
+	public static Texture fondo;
 
 	public static void cargarTexturas() {
 		FileHandle imageFileHandle = Gdx.files.internal("controles/leftarrow.png");
 		left_arrow = new Texture(imageFileHandle);
 		imageFileHandle = Gdx.files.internal("controles/rightarrow.png");
 		right_arrow = new Texture(imageFileHandle);
+		imageFileHandle = Gdx.files.internal("fondo/wallpaper.jpg");
+		fondo = new Texture(imageFileHandle);
 	}
 
 	public static void dispose(){
-
+		left_arrow.dispose();
+		right_arrow.dispose();
+		fondo.dispose();
 	}
 }

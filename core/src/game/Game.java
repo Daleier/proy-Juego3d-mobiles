@@ -7,6 +7,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -65,13 +66,11 @@ public class Game extends com.badlogic.gdx.Game implements InputProcessor {
 		this.height = Gdx.graphics.getHeight();
 		Texturas.cargarTexturas();
 		AssetManager assets = new AssetManager();
-        assets.load("modelos/fondo/lowpolymountains.obj", Model.class);
         assets.load("modelos/spaceship/spaceship.obj", Model.class);
 		assets.load("modelos/asteroid/asteroid.obj", Model.class);
         assets.load("modelos/asteroid/a2.obj", Model.class);
         assets.finishLoading();
 
-        Model modelSuelo = assets.get("modelos/fondo/lowpolymountains.obj", Model.class);
         Model modelNave = assets.get("modelos/spaceship/spaceship.obj", Model.class);
         Model modelEnemigo0 = assets.get("modelos/asteroid/asteroid.obj", Model.class);
         Model modelEnemigo1 = assets.get("modelos/asteroid/a2.obj", Model.class);
@@ -88,14 +87,10 @@ public class Game extends com.badlogic.gdx.Game implements InputProcessor {
         environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, 0f, -1f, 1f));
 
         this.instanceNave = new ModelInstance(modelNave);
-        this.instanceSuelo = new ModelInstance(modelSuelo);
+//        this.instanceSuelo = new ModelInstance(modelSuelo);
         this.instanceEnemigo0 = new ModelInstance(modelEnemigo0);
         this.instanceEnemigo1 = new ModelInstance(modelEnemigo1);
         this.instanceDisparo = new ModelInstance(modelDisparo);
-
-        //Modificar el color del suelo.
-        for (int i = 0; i < this.instanceSuelo.materials.size; i++)
-            this.instanceSuelo.materials.get(i).set(ColorAttribute.createDiffuse(Color.BROWN));
 
         this.controlador = new Controlador(this.meuMundo);
         spritebatch = new SpriteBatch();
@@ -126,18 +121,16 @@ public class Game extends com.badlogic.gdx.Game implements InputProcessor {
 		Mundo.cronometro -= Gdx.graphics.getDeltaTime();
 
         modelBatch.begin(camara3d);
-
-        this.instanceNave.transform.set(this.meuMundo.getNave().matriz);
+		spritebatch.begin();
+		spritebatch.draw(Texturas.fondo,0,0);
+		spritebatch.end();
+		this.instanceNave.transform.set(this.meuMundo.getNave().matriz);
         modelBatch.render(instanceNave, environment);
         if (this.meuMundo.getDisparo().getVelocidade().z>0) {
             this.instanceDisparo.transform.set(this.meuMundo.getDisparo().matriz);
             modelBatch.render(instanceDisparo, environment);
         }
-
-        for (MovilMax s : this.meuMundo.getSuelos()) {
-            this.instanceSuelo.transform.set(s.matriz);
-            modelBatch.render(instanceSuelo, environment);
-        }
+		
         for (Enemigo e : this.meuMundo.getEnemigos()) {
             if(e.getTextura() < 0.5){
 				e.escala=0.4f;

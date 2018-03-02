@@ -122,7 +122,7 @@ public class Game extends com.badlogic.gdx.Game implements InputProcessor {
 
         modelBatch.begin(camara3d);
 		spritebatch.begin();
-		spritebatch.draw(Texturas.fondo,0,0);
+		spritebatch.draw(Texturas.fondo,0,-height * 0.1f);
 		spritebatch.end();
 		this.instanceNave.transform.set(this.meuMundo.getNave().matriz);
         modelBatch.render(instanceNave, environment);
@@ -130,7 +130,7 @@ public class Game extends com.badlogic.gdx.Game implements InputProcessor {
             this.instanceDisparo.transform.set(this.meuMundo.getDisparo().matriz);
             modelBatch.render(instanceDisparo, environment);
         }
-		
+
         for (Enemigo e : this.meuMundo.getEnemigos()) {
             if(e.getTextura() < 0.5){
 				e.escala=0.4f;

@@ -20,6 +20,15 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.collision.Ray;
+
+import javax.naming.ldap.Control;
 
 import controlador.Controlador;
 import modelo.Enemigo;
@@ -40,12 +49,14 @@ public class Game extends com.badlogic.gdx.Game implements InputProcessor {
     private Controlador controlador;
     private SpriteBatch spritebatch;
     private BitmapFont bitMapFont;
-    private StringBuilder sbufferAciertos;
+	private BitmapFont bitMapFontCrono;
+	private StringBuilder sbufferAciertos;
     private StringBuilder sbufferVidas;
     private StringBuilder sbufferCronometro;
-
-	private int width;
-    private int height;
+	private float width;
+    private float height;
+    private Vector2 leftArrowPosition;
+	private Vector2 rightArrowPosition;
 
     @Override
     public void create() {
@@ -93,10 +104,16 @@ public class Game extends com.badlogic.gdx.Game implements InputProcessor {
 		sbufferCronometro = new StringBuilder();
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/dsdigit.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-		parameter.size = (int)(25);
+		parameter.size = (int)(width * 0.03f) ;
 		this.bitMapFont = generator.generateFont(parameter); // font size in pixels
+		parameter.size = (int) (width * 0.04f);
+		this.bitMapFontCrono = generator.generateFont(parameter);
+		bitMapFontCrono.setColor(Color.RED);
 		generator.dispose();
-        Gdx.input.setInputProcessor(this);
+
+		leftArrowPosition = new Vector2(0, height/2);
+		rightArrowPosition = new Vector2(width-(width*0.1f),height/2);
+		Gdx.input.setInputProcessor(this);
     }
 
     @Override
@@ -144,16 +161,15 @@ public class Game extends com.badlogic.gdx.Game implements InputProcessor {
 		sbufferAciertos.setLength(0);
 		sbufferAciertos.append("ENEMIGOS ELIMINADOS: "+ Nave.getAciertos());
 		spritebatch.begin();
-		spritebatch.draw(Texturas.left_arrow,0,height/2);
-		spritebatch.draw(Texturas.right_arrow, width-20, (float)height/2, width*0.2, height * 0.2);
+		spritebatch.draw(Texturas.left_arrow,leftArrowPosition.x,leftArrowPosition.y, width*0.1f, height *0.1f);
+		spritebatch.draw(Texturas.right_arrow, rightArrowPosition.x, rightArrowPosition.y, width*0.1f, height * 0.1f);
 		bitMapFont.setColor(Color.YELLOW);
 		bitMapFont.draw(spritebatch, sbufferAciertos,
-				10, 20);
+				10, height-(height * 0.95f));
 		bitMapFont.draw(spritebatch, sbufferVidas,
-				this.width-220, 20);
-		bitMapFont.setColor(Color.RED);
-		bitMapFont.draw(spritebatch, sbufferCronometro,
-				(this.width/2) - 5, this.height-20);
+				this.width-(width*0.27f), height-(height * 0.95f));
+		bitMapFontCrono.draw(spritebatch, sbufferCronometro,
+				(this.width/2) - 5, this.height-(height*0.05f));
         spritebatch.end();
         Gdx.gl20.glDisable(GL20.GL_DEPTH_TEST);
 		// hace nave vulnerable despues de 1 segundo desde la ultima vez que colisiona con un enemigo
@@ -236,13 +252,29 @@ public class Game extends com.badlogic.gdx.Game implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		this.controlador.pulsarTecla(Controlador.Keys.ESPAZO);
+		Vector3 temporal= new Vector3(screenX,screenY,0);
+		Circle dedo = new Circle(temporal.x,temporal.y,2);
+		if(Intersector.overlaps(dedo,
+				new Rectangle(leftArrowPosition.x,leftArrowPosition.y-height*0.1f,
+				width*0.14f, height*0.1f))){
+			this.controlador.pulsarTecla(Controlador.Keys.ESQUERDA);
+		}else if (Intersector.overlaps(dedo,
+				new Rectangle(rightArrowPosition.x,rightArrowPosition.y-height*0.1f,
+				width*0.22f, height*0.1f) )){
+			this.controlador.pulsarTecla(Controlador.Keys.DEREITA);
+		}else{
+			this.controlador.pulsarTecla(Controlador.Keys.ESPAZO);
+		}
+
+
 		return false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-
+		this.controlador.liberarTecla(Controlador.Keys.ESPAZO);
+		this.controlador.liberarTecla(Controlador.Keys.DEREITA);
+		this.controlador.liberarTecla(Controlador.Keys.ESQUERDA);
         return false;
     }
 

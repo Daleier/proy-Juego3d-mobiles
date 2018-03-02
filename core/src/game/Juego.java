@@ -1,7 +1,5 @@
 package game;
 
-import com.badlogic.gdx.Game;
-
 import modelo.Texturas;
 
 /**
@@ -14,6 +12,7 @@ public class Juego extends com.badlogic.gdx.Game {
 	@Override
 	public void create() {
 		Texturas.cargarTexturas();
+		Audio.cargarAudio();
 		setScreen(new PantallaInicio(this));
 	}
 
@@ -21,5 +20,6 @@ public class Juego extends com.badlogic.gdx.Game {
 	public void dispose() {
 		super.dispose();
 		Texturas.dispose();
+		Audio.dispose();
 	}
 }

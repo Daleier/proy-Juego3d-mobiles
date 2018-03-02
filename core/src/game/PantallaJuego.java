@@ -92,7 +92,6 @@ public class PantallaJuego implements InputProcessor, Screen {
         environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, 0f, -1f, 1f));
 
         this.instanceNave = new ModelInstance(modelNave);
-//        this.instanceSuelo = new ModelInstance(modelSuelo);
         this.instanceEnemigo0 = new ModelInstance(modelEnemigo0);
         this.instanceEnemigo1 = new ModelInstance(modelEnemigo1);
         this.instanceDisparo = new ModelInstance(modelDisparo);
@@ -113,6 +112,7 @@ public class PantallaJuego implements InputProcessor, Screen {
 
 		leftArrowPosition = new Vector2(0, height/2);
 		rightArrowPosition = new Vector2(width-(width*0.1f),height/2);
+		Audio.musicaFondo.play();
 		Gdx.input.setInputProcessor(this);
     }
 
@@ -182,6 +182,7 @@ public class PantallaJuego implements InputProcessor, Screen {
 
     private void finJuego(){
 		HighScores.engadirPuntuacion(Nave.getAciertos());
+		Audio.musicaFondo.stop();
 		game.setScreen(new PantallaInicio(game));
 		dispose();
 	}

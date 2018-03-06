@@ -62,7 +62,6 @@ public class PantallaJuego implements InputProcessor, Screen {
     private Vector2 leftArrowPosition;
 	private Vector2 rightArrowPosition;
 	private Game game;
-	// TODO añadir sonido
 
     public PantallaJuego(Game game) {
     	this.game = game;

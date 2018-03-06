@@ -54,7 +54,7 @@ public class PantallaInicio implements Screen, InputProcessor {
 		this.bitMapFont = generator.generateFont(parameter); // font size in pixels
 		generator.dispose();
 		sBufferTitle = new StringBuilder("Space Defender");
-		sBufferPuntuacion = new StringBuilder("Máxima puntuación: 0");
+		sBufferPuntuacion = new StringBuilder("Maxima puntuacion: 0");
 		Gdx.input.setInputProcessor(this);
 	}
 
@@ -116,7 +116,7 @@ public class PantallaInicio implements Screen, InputProcessor {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		sBufferPuntuacion.setLength(0);
-		sBufferPuntuacion.append("Máxima puntuación: "+HighScores.highscores);
+		sBufferPuntuacion.append("Maxima puntuacion: "+HighScores.highscores);
 		spritebatch.begin();
 		spritebatch.draw(Texturas.button_play, botones[0].x, botones[0].y,  botones[0].width, botones[0].height);
 		spritebatch.draw(Texturas.button_exit, botones[1].x, botones[1].y,  botones[1].width, botones[1].height);
@@ -136,7 +136,6 @@ public class PantallaInicio implements Screen, InputProcessor {
 		camara2d.setToOrtho(false, width, heigth);
 		camara2d.update();
 		spritebatch.setProjectionMatrix(camara2d.combined);
-		spritebatch.disableBlending();
 		Gdx.input.setInputProcessor(this);
 
 	}

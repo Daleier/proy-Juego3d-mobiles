@@ -126,9 +126,6 @@ public class PantallaJuego implements InputProcessor, Screen {
         controlador.update(Gdx.graphics.getDeltaTime());
 		Mundo.cronometro -= Gdx.graphics.getDeltaTime();
 
-		if(Mundo.cronometro <= 0 || Nave.getVidas_restantes() <= 0){
-			finJuego();
-		}
         modelBatch.begin(camara3d);
 		spritebatch.begin();
 		spritebatch.draw(Texturas.fondo,0,-height * 0.1f);
@@ -178,14 +175,14 @@ public class PantallaJuego implements InputProcessor, Screen {
 		if(Nave.invulnerable && Nave.getTiempo_ultimo_impacto() > 1 + Mundo.getCronometro()){
 			Nave.invulnerable=false;
 		}
-    }
 
-    private void finJuego(){
-		HighScores.engadirPuntuacion(Nave.getAciertos());
-		Audio.musicaFondo.stop();
-		game.setScreen(new PantallaInicio(game));
-		dispose();
-	}
+		if(Mundo.cronometro <= 0 || Nave.getVidas_restantes() <= 0){ // fin partida
+			HighScores.engadirPuntuacion(Nave.getAciertos());
+			Audio.musicaFondo.stop();
+			game.setScreen(new PantallaInicio(game));
+			return;
+		}
+    }
 
     @Override
     public void resize(int width, int height) {

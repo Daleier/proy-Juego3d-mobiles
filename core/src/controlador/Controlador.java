@@ -3,6 +3,7 @@ package controlador;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
 
+import game.Audio;
 import modelo.Enemigo;
 import modelo.Mundo;
 import modelo.Nave;
@@ -59,7 +60,8 @@ public class Controlador {
                 if(!Nave.invulnerable){
 					Nave.quitarVidas_restantes();
 					Nave.setTiempo_ultimo_impacto(Mundo.getCronometro());
-					Nave.invulnerable = true;
+                    Audio.explosionNave.play(1.5f);
+                    Nave.invulnerable = true;
 
 					Gdx.app.log("Controlador", "Colisión de nave con enemigo");
 				}
@@ -85,6 +87,7 @@ public class Controlador {
                 this.meuMundo.getDisparo().posicion = this.auxDisparoPos;
                 //Hacer que el enemigo desaparezca de pantalla y se vuelva a regenerar.
                 e.posicion.z = -150;
+                Audio.explosionAsteroide.play();
                 Nave.addAciertos();
                 //Utiles.imprimirLog("Controlador", "controlarDisparo", "Colisión de disparo  con enemigo");
             }
@@ -149,6 +152,7 @@ public class Controlador {
             if (meuMundo.getDisparo().posicion.z == 25) {
                 this.meuMundo.getDisparo().posicion.set(this.meuMundo.getNave().posicion.cpy());
                 this.meuMundo.getDisparo().setVelocidade(this.meuMundo.getDisparo().getVelocidadeMax());
+                Audio.disparo.play();
             }
         }
     }

@@ -16,7 +16,7 @@ public class Mundo {
         this.disparo= new MovilMax(new Vector3(0, 30, 25), 1f, new Vector3(0, 0, 0), new Vector3(0f, 0, 200f),20);
         this.iniciarSuelo();
         this.iniciarEnemigo();
-        this.cronometro = 120;
+        this.cronometro = 30;
     }
 
     public static float getCronometro() {

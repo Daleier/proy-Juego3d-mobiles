@@ -12,8 +12,8 @@ public class Audio {
 	public static Music musicaFondo;
 
 	public static void cargarAudio() {
-		explosionNave = Gdx.audio.newSound(Gdx.files.internal("sonido/boom8.wav"));
-		explosionAsteroide = Gdx.audio.newSound(Gdx.files.internal("sonido/chuncky_explosion.mp3"));
+		explosionAsteroide = Gdx.audio.newSound(Gdx.files.internal("sonido/boom8.wav"));
+		explosionNave = Gdx.audio.newSound(Gdx.files.internal("sonido/chunky_explosion.mp3"));
 		disparo = Gdx.audio.newSound(Gdx.files.internal("sonido/laser1.wav"));
 		musicaFondo = Gdx.audio.newMusic(Gdx.files.internal("sonido/orbital_colossus.mp3"));
 		musicaFondo.setLooping(true);

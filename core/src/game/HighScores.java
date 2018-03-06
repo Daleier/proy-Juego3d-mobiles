@@ -20,6 +20,7 @@ public class HighScores {
 		int highscore = Integer.parseInt(highscores);
 		if(highscore < puntuacion){
 			HighScores.highscores = Integer.toString(puntuacion);
+			HighScores.save();
 		}
 	}
 

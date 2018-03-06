@@ -12,7 +12,7 @@ public class Enemigo extends MovilMax {
     }
     public void setVelocidade(Vector3 velocidade) {
         this.velocidade = velocidade;
-        //No se va a permitir que la nave avance hacia atrás ni que tampoco se detenga del todo.
+        //No se va a permitir que la nave avance hacia atrás ni que tampoco se detenga completamente.
         if (velocidade.z < (-Math.abs(this.velocidadeMax.z)))
             this.velocidade.z = velocidadeMax.z;
         else if (velocidade.z > -Math.abs(this.velocidadeMax.z)/8)
